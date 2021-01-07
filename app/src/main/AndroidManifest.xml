@@ -9,6 +9,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Mapgon">
+        <activity android:name=".atividades.Sobre"></activity>
+        <activity android:name=".atividades.Jogo" />
+        <activity android:name=".atividades.DefineEquipa" />
+        <activity android:name=".atividades.Servidor" />
+        <activity android:name=".atividades.AguardaJogo" />
+        <activity android:name=".atividades.Cliente" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

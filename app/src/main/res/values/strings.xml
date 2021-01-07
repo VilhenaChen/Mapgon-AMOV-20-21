@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Map&amp;gon</string>
+    <string name="Modo_Servidor">Server Mode</string>
+    <string name="Modo_Cliente">Client Mode</string>
+    <string name="TopJogadores">Scoreboard</string>
+    <string name="Sobre">About</string>
+    <string name="Conectar">Connect</string>
+    <string name="InsiraIP">Insert the IP address</string>
+    <string name="Amov">Aplições Móveis</string>
 </resources>

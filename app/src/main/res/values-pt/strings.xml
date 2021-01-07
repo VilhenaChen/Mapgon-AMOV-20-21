@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Map&amp;gon</string>
+    <string name="Modo_Servidor">Modo Servidor</string>
+    <string name="Modo_Cliente">Modo Cliente</string>
+    <string name="TopJogadores">Top Jogadores</string>
+    <string name="Sobre">Sobre</string>
+    <string name="Conectar">Conectar</string>
+    <string name="InsiraIP">Insira o endereço IP</string>
+    <string name="Amov">Aplições Móveis</string>
+</resources>
