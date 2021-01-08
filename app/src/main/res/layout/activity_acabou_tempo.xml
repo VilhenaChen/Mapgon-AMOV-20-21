@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".atividades.Cliente"
-    android:backgroundTint="@color/white">
+    tools:context=".atividades.AcabouTempo">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -17,7 +16,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/Modo_Cliente"
+                android:text="@string/FimJogo"
                 android:textAlignment="center"
                 android:layout_gravity="center"
                 android:textSize="52sp"
@@ -32,39 +31,30 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="2">
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="2">
-                <EditText
+                android:layout_weight="1">
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="@string/InsiraIP"/>
+                    android:gravity="center_horizontal|bottom"
+                    android:text="@string/TempoAcabou"
+                    android:textSize="20sp"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_horizontal|top"
+                    android:text="@string/Objetivo"
+                    android:textSize="20sp"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="2">
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="@string/Conectar"
-                android:textColor="@color/white"
-                android:textSize="20sp"
-                android:backgroundTint="@color/tijolo"/>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="3">
-            </LinearLayout>
+                android:layout_weight="3"></LinearLayout>
         </LinearLayout>
+
     </LinearLayout>
 </FrameLayout>

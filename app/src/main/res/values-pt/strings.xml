@@ -8,4 +8,25 @@
     <string name="Conectar">Conectar</string>
     <string name="InsiraIP">Insira o endereço IP</string>
     <string name="Amov">Aplições Móveis</string>
+    <string name="FimJogo">Acabou o Jogo</string>
+    <string name="Objetivo">Nao conseguiu fazer o Poligono</string>
+    <string name="TempoAcabou">O tempo acabou</string>
+    <string name="CoordenadasInicias">Coordenadas Iniciais</string>
+    <string name="ConstEquipa">Equipa:</string>
+    <string name="ServerIP">IP do servidor:</string>
+    <string name="PararCriacao">Fechar equipa</string>
+    <string name="IdEquipa">ID da equipa:</string>
+    <string name="NomeEquipa">Nome da equipa</string>
+    <string name="InsiraNome">Insira o nome da equipa:</string>
+    <string name="Comecar">Comecar</string>
+    <string name="Localizacaojog">Localizacao dos Jogadores</string>
+    <string name="Distanciajog">Distancia entre jogadores</string>
+    <string name="TempoRes">Tempo restante</string>
+    <string name="FinalJogo">Fim do Jogo</string>
+    <string name="AngulosJog">Angulos entre jogadores</string>
+    <string name="Poligonos">Poligonos</string>
+    <string name="Data">Data</string>
+    <string name="Hora">Hora</string>
+    <string name="DistanciaMediajog">Distancia media entre jogadores</string>
+    <string name="AreaPol">Area do poligono</string>
 </resources>

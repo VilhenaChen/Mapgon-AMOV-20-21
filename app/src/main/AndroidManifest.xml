@@ -9,7 +9,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Mapgon">
-        <activity android:name=".atividades.Sobre"></activity>
+        <activity android:name=".atividades.TopJogdoresSelecionado"></activity>
+        <activity android:name=".atividades.TopJogadores" />
+        <activity android:name=".atividades.Poligonos" />
+        <activity android:name=".atividades.AcabouTempo" />
+        <activity android:name=".atividades.FimJogo" />
+        <activity android:name=".atividades.JogoMapa" />
+        <activity android:name=".atividades.Sobre" />
         <activity android:name=".atividades.Jogo" />
         <activity android:name=".atividades.DefineEquipa" />
         <activity android:name=".atividades.Servidor" />

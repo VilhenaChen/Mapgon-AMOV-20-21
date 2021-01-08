@@ -7,4 +7,25 @@
     <string name="Conectar">Connect</string>
     <string name="InsiraIP">Insert the IP address</string>
     <string name="Amov">Aplições Móveis</string>
+    <string name="FimJogo">Game Over</string>
+    <string name="Objetivo">You didnt make the polygon</string>
+    <string name="TempoAcabou">The time has ended</string>
+    <string name="CoordenadasInicias">Inicial  coordinates</string>
+    <string name="ConstEquipa">Team</string>
+    <string name="ServerIP">Server IP:</string>
+    <string name="PararCriacao">Close team</string>
+    <string name="IdEquipa">Team ID:</string>
+    <string name="NomeEquipa">Team name</string>
+    <string name="InsiraNome">Insert team name:</string>
+    <string name="Comecar">Start</string>
+    <string name="Localizacaojog">Players location</string>
+    <string name="Distanciajog">Players distance</string>
+    <string name="TempoRes">Remaining time</string>
+    <string name="FinalJogo">End game</string>
+    <string name="AngulosJog">Angles between players</string>
+    <string name="Poligonos">Polygons</string>
+    <string name="Data">Date</string>
+    <string name="Hora">Hour</string>
+    <string name="DistanciaMediajog">Average distance between players</string>
+    <string name="AreaPol">Polygon area</string>
 </resources>
