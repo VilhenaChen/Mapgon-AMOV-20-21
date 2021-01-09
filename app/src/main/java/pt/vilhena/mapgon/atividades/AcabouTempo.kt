@@ -10,4 +10,5 @@ class AcabouTempo : Activity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_acabou_tempo)
     }
+
 }
