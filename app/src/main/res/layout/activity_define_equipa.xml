@@ -70,6 +70,7 @@
                 android:layout_height="0dp"
                 android:layout_weight="1">
                 <EditText
+                    android:id="@+id/nomeEquipa"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:hint="@string/InsiraNome"/>
@@ -108,7 +109,8 @@
                     android:text="@string/Comecar"
                     android:textColor="@color/white"
                     android:textSize="20sp"
-                    android:backgroundTint="@color/tijolo"/>
+                    android:backgroundTint="@color/tijolo"
+                    android:onClick="onbtnStart"/>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

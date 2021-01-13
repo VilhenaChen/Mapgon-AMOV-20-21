@@ -28,4 +28,8 @@
     <string name="Hora">Hour</string>
     <string name="DistanciaMediajog">Average distance between players</string>
     <string name="AreaPol">Polygon area</string>
+    <string name="msg_ip_address">Server IP Adress: %s \nWaiting for a Client...</string>
+    <string name="error_address">Address not Recognized</string>
+    <string name="btn_emulator">Emulador</string>
+    <string name="button_cancel">Cancelar</string>
 </resources>

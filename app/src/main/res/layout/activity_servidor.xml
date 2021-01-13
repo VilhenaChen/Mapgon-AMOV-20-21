@@ -131,7 +131,8 @@
                     android:text="@string/PararCriacao"
                     android:textColor="@color/white"
                     android:textSize="20sp"
-                    android:backgroundTint="@color/tijolo"/>
+                    android:backgroundTint="@color/tijolo"
+                    android:onClick="onCloseTeam"/>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

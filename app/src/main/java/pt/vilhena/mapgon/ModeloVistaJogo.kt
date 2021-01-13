@@ -1,5 +1,6 @@
 package pt.vilhena.mapgon
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import java.io.InputStream
@@ -20,10 +21,8 @@ class ModeloVistaJogo : ViewModel(){
         SETTING_PARAMETERS, SERVER_CONNECTING, CLIENT_CONNECTING, CONNECTION_ESTABLISHED, CONNECTION_ERROR, CONNECTION_ENDED
     }
 
-    val connectionState = MutableLiveData<ConnectionState>()
-    init {
-        connectionState.postValue(ConnectionState.SETTING_PARAMETERS)
-    }
+    val connectionState = MutableLiveData(ConnectionState.SETTING_PARAMETERS)
+
 
    
     private var socket : Socket? = null

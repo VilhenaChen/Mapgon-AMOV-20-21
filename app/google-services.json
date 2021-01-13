@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "959833469342",
+    "project_id": "trabalho-2-amov",
+    "storage_bucket": "trabalho-2-amov.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:959833469342:android:32da838004cabc5c6d668f",
+        "android_client_info": {
+          "package_name": "pt.vilhena.mapgon"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "959833469342-d655jvckec62j6114vsolp11nsk46ers.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "pt.vilhena.mapgon",
+            "certificate_hash": "ce5058b161f35ea5e56b70f07afeccacbea50730"
+          }
+        },
+        {
+          "client_id": "959833469342-5j7ln6g5bb3qv7ql0nfi3scpcjq201jc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBpzsC7jTi3yUEyNu3dMgMgg5uuTf3oooU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "959833469342-5j7ln6g5bb3qv7ql0nfi3scpcjq201jc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
