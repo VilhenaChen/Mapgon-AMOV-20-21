@@ -13,6 +13,7 @@ import android.net.wifi.WifiManager
 import android.os.Bundle
 import android.text.InputFilter
 import android.text.Spanned
+import android.util.Log
 import android.util.Patterns
 import android.view.Gravity
 import android.view.View
@@ -38,7 +39,8 @@ const val CLIENT_MODE = 1
 class Servidor : AppCompatActivity() {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     val request = LocationRequest()
-    var latitude : String = ""
+    lateinit var callback : LocationCallback
+    var latitude : String = "cenas"
     var longitude : String = ""
     var coordenadas : String =""
     lateinit var dados : Dados
@@ -57,25 +59,32 @@ class Servidor : AppCompatActivity() {
         request.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-
         val permission =ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION)
         if(permission == PackageManager.PERMISSION_GRANTED)
         {
+            callback = LocationCallback()
             fusedLocationClient.requestLocationUpdates(request, object : LocationCallback(){
                 override fun onLocationResult(locationResult: LocationResult) {
                     val location : Location? = locationResult.lastLocation
                     if(location!=null)
                     {
+                        Log.d("LATITUDE 0: ", this@Servidor.latitude)
                         latitude = location!!.latitude.toString()
                         longitude = location!!.longitude.toString()
                         coordenadas = latitude + " ; " + longitude
                         coordenadasIniciais.text = coordenadas
+                        Log.d("LATITUDE 1: ", this@Servidor.latitude)
                     }
-
-
                 }
             },null)
         }
+        Log.d("LATITUDE 2: ", this@Servidor.latitude)
+        getIPServidor()
+        dados.setIDEquipa(IPServer.text.toString())
+        dados.mudaNomeEquipa("")
+        dados.adicionaJogador(latitude, longitude)
+        dados.criaBD()
+
         /*model.connectionState.observe(this) {
             if (it != ModeloVistaJogo.ConnectionState.SETTING_PARAMETERS &&
                     it != ModeloVistaJogo.ConnectionState.SERVER_CONNECTING && dlg?.isShowing == true) {
@@ -148,6 +157,19 @@ class Servidor : AppCompatActivity() {
 
         dlg?.show()
     } */
+
+    //Mostra o IP do Servidor
+    fun getIPServidor() {
+        val wifiManager = applicationContext.getSystemService(WIFI_SERVICE) as WifiManager
+        val ip = wifiManager.connectionInfo.ipAddress
+        val strIPAddress = String.format("%d.%d.%d.%d",
+            ip and 0xff,
+            (ip shr 8) and 0xff,
+            (ip shr 16) and 0xff,
+            (ip shr 24) and 0xff
+        )
+        IPServer.text = strIPAddress
+    }
 
     //Escrever na Firesbase as coordenadas
     fun onCloseTeam(view: View) {

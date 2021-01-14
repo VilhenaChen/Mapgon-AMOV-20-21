@@ -7,9 +7,19 @@ import java.io.Serializable
 class Dados : Serializable {
 
     private var arrayJogadores = ArrayList<Jogador>()
-    private lateinit var nomeEquipa : String
+    var nomeEquipa : String = ""
+        private set(value) {
+            field = value
+        }
+    private lateinit var nomeEquipaDB : String
     private lateinit var idEquipa : String
 
+    //get Array Jogadores
+    fun getArrayJogadores() : ArrayList<Jogador>{
+        return arrayJogadores
+    }
+
+    //Adiciona Jogador ao Array de Jogadores
     fun adicionaJogador(latitude : String, longitude : String)
     {
         if(arrayJogadores.isEmpty()){
@@ -20,19 +30,113 @@ class Dados : Serializable {
         }
     }
 
+    //Define o Id da equipa
+    fun setIDEquipa (id : String) {
+        idEquipa = id
+    }
+
     //Define o nome da equipa (idEquipa - nomeEscolhido)
     fun mudaNomeEquipa(nome : String) {
-        nomeEquipa = "$idEquipa - $nome"
+        if(nome == "") {
+            nomeEquipa = idEquipa
+        }
+        else{
+            nomeEquipaDB = nomeEquipa
+            nomeEquipa = "$idEquipa - $nome"
+        }
+    }
+
+    //Muda nome da equipa no Firebase
+    fun mudaNomeEquipaDB() {
+        val db = Firebase.firestore
+        getInfoEquipa()
+        db.collection("Equipas").document(nomeEquipaDB).delete()
+        
+        for (i in arrayJogadores.indices)
+        {
+            if(i == 0){
+                criaBD()
+            }
+            else{
+                insereJogadorEspecificoDB(i)
+            }
+        }
+    }
+
+    //Cria a base de Dados na firebase com o IP do server como ID da Equipa e cria a pagina do 1 jogador ou seja do player que esta a fazer de server
+    fun criaBD() {
+        val db = Firebase.firestore
+        val coordenadas = hashMapOf(
+            "Latitude" to arrayJogadores[0].latitude,
+            "Longitude" to arrayJogadores[0].longitude
+        )
+        db.collection("Equipas").document(nomeEquipa).collection( arrayJogadores[0].nome).document("coordenadas").set(coordenadas)
+        db.collection("Equipas").document(nomeEquipa).set(hashMapOf("nrJogadores" to 1))
     }
 
     //Insere um jogador na Base de Dados
-    fun inserJogadorDB(jogador : String, latitude : String, longitude : String) {
+    fun insereJogadorDB() {
         val db = Firebase.firestore
+        val v = db.collection("Equipas").document(nomeEquipa)
         val coordenadas = hashMapOf(
-            "Latitude" to latitude,
-            "Longitude" to longitude
+            "Latitude" to arrayJogadores.last().latitude,
+            "Longitude" to arrayJogadores.last().longitude
         )
-        db.collection("Equipas").document(nomeEquipa).collection(jogador).document("coordenadas").set(coordenadas)
+        db.collection("Equipas").document(nomeEquipa).collection(arrayJogadores.last().nome).document("coordenadas").set(coordenadas)
+
+        db.runTransaction { transition ->
+            val doc = transition.get(v)
+            val numero =  doc.getLong("nrJogadores")!! + 1
+            transition.update(v,"nrJogadores", numero)
+            null
+        }
+    }
+
+    //Insere um jogador na Base de Dados
+    fun insereJogadorEspecificoDB(pos : Int) {
+        val db = Firebase.firestore
+        val v = db.collection("Equipas").document(nomeEquipa)
+        val coordenadas = hashMapOf(
+                "Latitude" to arrayJogadores[pos].latitude,
+                "Longitude" to arrayJogadores[pos].longitude
+        )
+        db.collection("Equipas").document(nomeEquipa).collection(arrayJogadores[pos].nome).document("coordenadas").set(coordenadas)
+
+        db.runTransaction { transition ->
+            val doc = transition.get(v)
+            val numero =  doc.getLong("nrJogadores")!! + 1
+            transition.update(v,"nrJogadores", numero)
+            null
+        }
+    }
+
+    //Obtem info equipa
+    fun getInfoEquipa(){
+        var cont : Int = 0
+        var idPlayer : Int = 1
+        var playerName : String = ""
+        val db = Firebase.firestore
+        val c = db.collection("Equipas").document(nomeEquipa)
+        arrayJogadores.clear()
+        db.runTransaction { transition ->
+            val doc = transition.get(c)
+            cont = doc.getLong("nrJogadores")!!.toInt()
+            null
+        }
+        while (idPlayer <= cont)
+        {
+            playerName = "Jogador$idPlayer"
+            val v = db.collection("Equipas").document(nomeEquipa).collection(playerName).document("coordenadas")
+            db.runTransaction { transition ->
+                val doc = transition.get(v)
+                val latitude = doc.getString("Latitude")!!
+                val longitude = doc.getString("Longitude")!!
+                adicionaJogador(latitude,longitude)
+                null
+            }
+            cont = cont + 1 
+        }
+
     }
 
     //Atualiza a seccao da base de dados relativa ao jogador passado

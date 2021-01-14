@@ -71,6 +71,7 @@
                 android:layout_height="0dp"
                 android:layout_weight="4">
                 <GridView
+                    android:id="@+id/grelha_JogadoresServidor"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:numColumns="1"
@@ -115,6 +116,7 @@
                 android:layout_height="0dp"
                 android:layout_weight="1">
                 <TextView
+                    android:id="@+id/IPServer"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
