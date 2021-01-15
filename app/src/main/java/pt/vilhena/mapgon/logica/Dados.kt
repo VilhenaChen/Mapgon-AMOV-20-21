@@ -79,6 +79,7 @@ class Dados : Serializable {
         )
         db.collection("Equipas").document(nomeEquipa).collection( arrayJogadores[0].nome).document("coordenadas").set(coordenadas)
         db.collection("Equipas").document(nomeEquipa).set(hashMapOf("nrJogadores" to 1))
+        db.collection("Equipas").document(nomeEquipa).set(hashMapOf("Comecou" to false))
     }
 
     //Insere um jogador na Base de Dados
@@ -98,6 +99,7 @@ class Dados : Serializable {
             null
         }
     }
+
 
 
 

@@ -146,7 +146,7 @@ class Cliente : AppCompatActivity()  {
                                     Log.d("AQUI 5","POIS")
                                     dados.adicionaJogador(latitude, longitude)
                                     dados.insereJogadorDB()
-                                    val intent = Intent(this, Jogo::class.java)
+                                    val intent = Intent(this, AguardaJogo::class.java)
                                     intent.putExtra("Dados", dados)
                                     startActivity(intent)
                                     finish()  

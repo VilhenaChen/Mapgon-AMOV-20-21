@@ -9,6 +9,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_define_equipa.*
 import kotlinx.android.synthetic.main.entrada_jogador.view.*
 import pt.vilhena.mapgon.R
@@ -68,7 +70,16 @@ class DefineEquipa : AppCompatActivity()  {
 
     //Ir para o Jogo
     fun onbtnStart(view: View) {
-        dados.mudaNomeEquipa(nomeEquipa.text.toString())
+        if(!nomeEquipa.text.toString().isEmpty()){
+            dados.mudaNomeEquipa(nomeEquipa.text.toString())
+        }
+        val db = Firebase.firestore
+        val v = db.collection("Equipas").document(dados.nomeEquipa)
+        db.runTransaction { transition ->
+            val doc = transition.get(v)
+            transition.update(v,"Comecou", true)
+            null
+        }
         val intent = Intent(this, Jogo::class.java)
         intent.putExtra("Dados", dados);
         startActivity(intent)
