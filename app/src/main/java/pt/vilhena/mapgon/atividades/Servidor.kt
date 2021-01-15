@@ -26,11 +26,13 @@ import com.google.firebase.firestore.Source
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_servidor.*
+import kotlinx.coroutines.*
 import pt.vilhena.mapgon.MainActivity
 import pt.vilhena.mapgon.ModeloVistaJogo
 import pt.vilhena.mapgon.R
 import pt.vilhena.mapgon.SERVER_PORT
 import pt.vilhena.mapgon.logica.Dados
+import java.util.concurrent.TimeUnit
 
 
 const val SERVER_MODE = 0
@@ -38,9 +40,7 @@ const val CLIENT_MODE = 1
 
 class Servidor : AppCompatActivity() {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-    val request = LocationRequest()
-    lateinit var callback : LocationCallback
-    var latitude : String = "cenas"
+    var latitude : String = ""
     var longitude : String = ""
     var coordenadas : String =""
     lateinit var dados : Dados
@@ -54,36 +54,26 @@ class Servidor : AppCompatActivity() {
         dados = intent.getSerializableExtra("Dados") as Dados
         //model = ViewModelProvider(this).get(ModeloVistaJogo::class.java)
 
-        request.interval=1000
-        request.fastestInterval = 500
-        request.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         val permission =ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION)
-        if(permission == PackageManager.PERMISSION_GRANTED)
-        {
-            callback = LocationCallback()
-            fusedLocationClient.requestLocationUpdates(request, object : LocationCallback(){
-                override fun onLocationResult(locationResult: LocationResult) {
-                    val location : Location? = locationResult.lastLocation
-                    if(location!=null)
-                    {
-                        Log.d("LATITUDE 0: ", this@Servidor.latitude)
-                        latitude = location!!.latitude.toString()
-                        longitude = location!!.longitude.toString()
-                        coordenadas = latitude + " ; " + longitude
-                        coordenadasIniciais.text = coordenadas
-                        Log.d("LATITUDE 1: ", this@Servidor.latitude)
-                    }
+        if(permission == PackageManager.PERMISSION_GRANTED) {
+            fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
+                if (location != null) {
+                    latitude = location!!.latitude.toString()
+                    longitude = location!!.longitude.toString()
+                    coordenadas = latitude + " ; " + longitude
+                    coordenadasIniciais.text = coordenadas
+                    getIPServidor()
+                    dados.setIDEquipa(IPServer.text.toString())
+                    dados.mudaNomeEquipa("")
+                    dados.adicionaJogador(latitude, longitude)
+                    dados.criaBD()
                 }
-            },null)
+            }
         }
-        Log.d("LATITUDE 2: ", this@Servidor.latitude)
-        getIPServidor()
-        dados.setIDEquipa(IPServer.text.toString())
-        dados.mudaNomeEquipa("")
-        dados.adicionaJogador(latitude, longitude)
-        dados.criaBD()
+
+
 
         /*model.connectionState.observe(this) {
             if (it != ModeloVistaJogo.ConnectionState.SETTING_PARAMETERS &&
@@ -173,6 +163,7 @@ class Servidor : AppCompatActivity() {
 
     //Escrever na Firesbase as coordenadas
     fun onCloseTeam(view: View) {
+        Log.d("A PRIMA DO DAVID DE 3",dados.getArrayJogadores()[0].latitude)
         val intent = Intent(this, DefineEquipa::class.java)
         intent.putExtra("Dados", dados);
         startActivity(intent)

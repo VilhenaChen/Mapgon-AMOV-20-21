@@ -1,14 +1,15 @@
 package pt.vilhena.mapgon.atividades
 
-import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.google.android.gms.maps.OnMapReadyCallback
+
 import pt.vilhena.mapgon.MainActivity
 import pt.vilhena.mapgon.R
 import pt.vilhena.mapgon.logica.Dados
 
-class JogoMapa : AppCompatActivity()  {
+class JogoMapa : AppCompatActivity() {
     lateinit var dados : Dados
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,4 +26,5 @@ class JogoMapa : AppCompatActivity()  {
         startActivity(intent)
         finish()
     }
+
 }

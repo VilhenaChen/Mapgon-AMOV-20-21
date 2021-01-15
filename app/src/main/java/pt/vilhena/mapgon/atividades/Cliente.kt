@@ -1,18 +1,30 @@
 package pt.vilhena.mapgon.atividades
 
+import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.InputFilter
 import android.text.Spanned
+import android.util.Log
 import android.util.Patterns
 import android.view.View
 import android.widget.EditText
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationServices
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+import kotlinx.android.synthetic.main.activity_cliente.*
+import kotlinx.android.synthetic.main.activity_servidor.*
 import pt.vilhena.mapgon.MainActivity
 import pt.vilhena.mapgon.ModeloVistaJogo
 import pt.vilhena.mapgon.R
@@ -24,11 +36,17 @@ class Cliente : AppCompatActivity()  {
     private lateinit var model : ModeloVistaJogo
     private var dlg : AlertDialog? = null
     lateinit var dados : Dados
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    var latitude : String = ""
+    var longitude : String = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_cliente)
 
         dados = intent.getSerializableExtra("Dados") as Dados
+
+
+
         /*model = ViewModelProvider(this).get(ModeloVistaJogo::class.java)
         model.connectionState.observe(this) {
             if (it != ModeloVistaJogo.ConnectionState.SETTING_PARAMETERS &&
@@ -94,6 +112,69 @@ class Cliente : AppCompatActivity()  {
         dlg.show()
     }
 
+
+
+    //Funcao do Botao "connectar"
+    fun onConnect(view: View) {
+        val db = Firebase.firestore
+        if(!IPClient.text.isEmpty()) {
+            db.collection("Equipas").document(IPClient.text.toString()).get().addOnSuccessListener { v ->
+                if(v.exists()){ //Caso a equipa exista
+                    Log.d("AQUI","POIS")
+                    fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+                    val permission = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                    if(permission == PackageManager.PERMISSION_GRANTED) {
+                        Log.d("AQUI 1/5","POIS")
+                        fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
+                            if (location != null) {
+                                Log.d("AQUI 2","POIS")
+                                latitude = location!!.latitude.toString()
+                                Log.d("AQUI 2.1","POIS")
+                                longitude = location!!.longitude.toString()
+                                Log.d("AQUI 2.2","POIS")
+                                dados.setIDEquipa(IPClient.text.toString())
+                                Log.d("AQUI 2.3","POIS")
+                                dados.mudaNomeEquipa("")
+                                Log.d("AQUI 2.4","POIS")
+                                dados.getInfoEquipa()
+                                Log.d("AQUI 3","POIS")
+                                Log.d("OI",dados.getArrayJogadores().last().latitude.toDouble().toString())
+                                var dist = dados.getFuncoesCoordenadas().haversine(dados.getArrayJogadores().last().latitude.toDouble(),dados.getArrayJogadores().last().longitude.toDouble(),dados.getArrayJogadores()[0].latitude.toDouble(),dados.getArrayJogadores()[0].longitude.toDouble())
+                                Log.d("PUTA QUE ME PARIU", dist.toString())
+                                Log.d("AQUI 4","POIS")
+                                if(dist <= 0.1){
+                                    Log.d("AQUI 5","POIS")
+                                    dados.adicionaJogador(latitude, longitude)
+                                    dados.insereJogadorDB()
+                                    val intent = Intent(this, Jogo::class.java)
+                                    intent.putExtra("Dados", dados)
+                                    startActivity(intent)
+                                    finish()  
+                                }
+                                else {
+                                    Toast.makeText(this, "Tem de estar a uma distanca maxima de 100m do Servidor", Toast.LENGTH_SHORT).show()
+                                    return@addOnSuccessListener
+                                }
+                            }
+                            else {
+                                Log.d("FIM", "POIS")
+                            }
+                        }
+                    }
+                }
+                else { //Caso a equipa nao exista na Base de Dados
+                    Toast.makeText(this, "O Servidor nao existe", Toast.LENGTH_SHORT).show()
+                    return@addOnSuccessListener
+                }
+            }
+        }
+        else
+        {
+            Toast.makeText(this, "O campo do IP nao pode estar vazio", Toast.LENGTH_SHORT).show()
+            return
+        }
+    }
+
     //Voltar atras
     override fun onBackPressed() {
         super.onBackPressed()
@@ -103,10 +184,5 @@ class Cliente : AppCompatActivity()  {
         finish()
     }
 
-    fun onConnect(view: View) {
-        val intent = Intent(this, Jogo::class.java)
-        intent.putExtra("Dados", dados)
-        startActivity(intent)
-        finish()
-    }
+
 }

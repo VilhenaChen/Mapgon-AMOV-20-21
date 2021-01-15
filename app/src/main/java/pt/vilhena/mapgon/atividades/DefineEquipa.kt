@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,6 +31,7 @@ class DefineEquipa : AppCompatActivity()  {
         grelha_JogadoresDefineEquipa.adapter = adapter
 
         TeamIDText.text = dados.nomeEquipa
+        //Log.d("A PRIMA DO DAVID DE 4",dados.getArrayJogadores()[0].latitude)
 
     }
 
@@ -68,6 +70,7 @@ class DefineEquipa : AppCompatActivity()  {
     fun onbtnStart(view: View) {
         dados.mudaNomeEquipa(nomeEquipa.text.toString())
         val intent = Intent(this, Jogo::class.java)
+        intent.putExtra("Dados", dados);
         startActivity(intent)
         finish()
     }
@@ -76,6 +79,7 @@ class DefineEquipa : AppCompatActivity()  {
     override fun onBackPressed() {
         super.onBackPressed()
         val intent = Intent(this, Servidor::class.java)
+        intent.putExtra("Dados", dados);
         startActivity(intent)
         finish()
     }

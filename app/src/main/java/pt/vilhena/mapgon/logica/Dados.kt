@@ -1,11 +1,14 @@
 package pt.vilhena.mapgon.logica
+import android.util.Log
 import com.google.firebase.firestore.Source
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.awaitAll
 import java.io.Serializable
 
 class Dados : Serializable {
 
+    private val funcoesCoordenadas = FuncoesCoordenadas()
     private var arrayJogadores = ArrayList<Jogador>()
     var nomeEquipa : String = ""
         private set(value) {
@@ -14,6 +17,10 @@ class Dados : Serializable {
     private lateinit var nomeEquipaDB : String
     private lateinit var idEquipa : String
 
+    //get Funcoes Coordenadas
+    fun getFuncoesCoordenadas() : FuncoesCoordenadas{
+        return funcoesCoordenadas
+    }
     //get Array Jogadores
     fun getArrayJogadores() : ArrayList<Jogador>{
         return arrayJogadores
@@ -92,6 +99,8 @@ class Dados : Serializable {
         }
     }
 
+
+
     //Insere um jogador na Base de Dados
     fun insereJogadorEspecificoDB(pos : Int) {
         val db = Firebase.firestore
@@ -117,24 +126,35 @@ class Dados : Serializable {
         var playerName : String = ""
         val db = Firebase.firestore
         val c = db.collection("Equipas").document(nomeEquipa)
+        Log.d("INFO","POIS")
         arrayJogadores.clear()
+        Log.d("INFO 2","POIS")
         db.runTransaction { transition ->
+            Log.d("INFO 3","POIS")
             val doc = transition.get(c)
             cont = doc.getLong("nrJogadores")!!.toInt()
+            Log.d("INFO 4","POIS")
             null
         }
+        /*if(idPlayer <= cont) {
+
+        }*/
+        while(cont == 0){Log.d("LOOP","POIS")}
         while (idPlayer <= cont)
         {
+            Log.d("INFO 5","POIS")
             playerName = "Jogador$idPlayer"
             val v = db.collection("Equipas").document(nomeEquipa).collection(playerName).document("coordenadas")
             db.runTransaction { transition ->
+                Log.d("INFO 6","POIS")
                 val doc = transition.get(v)
                 val latitude = doc.getString("Latitude")!!
                 val longitude = doc.getString("Longitude")!!
                 adicionaJogador(latitude,longitude)
                 null
             }
-            cont = cont + 1 
+            while(arrayJogadores.isEmpty() || arrayJogadores.last().id == idPlayer - 1){}
+            idPlayer = idPlayer + 1
         }
 
     }
@@ -160,6 +180,8 @@ class Dados : Serializable {
             null
         }
     }
+
+
 
     //Le da base de Dados a lista de poligonos para depois mostarar na scoreboard
     fun getListaPoligonos() {
