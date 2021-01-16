@@ -33,7 +33,7 @@ class AguardaJogo : AppCompatActivity()  {
                     }
                     null
                 }
-                delay(30000)
+                delay(1000)
             }
         }
     }

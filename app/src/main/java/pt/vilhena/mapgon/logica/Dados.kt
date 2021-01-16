@@ -77,9 +77,12 @@ class Dados : Serializable {
             "Latitude" to arrayJogadores[0].latitude,
             "Longitude" to arrayJogadores[0].longitude
         )
+        val jogo = hashMapOf(
+            "nrJogadores" to 1,
+            "Comecou" to false
+        )
         db.collection("Equipas").document(nomeEquipa).collection( arrayJogadores[0].nome).document("coordenadas").set(coordenadas)
-        db.collection("Equipas").document(nomeEquipa).set(hashMapOf("nrJogadores" to 1))
-        db.collection("Equipas").document(nomeEquipa).set(hashMapOf("Comecou" to false))
+        db.collection("Equipas").document(nomeEquipa).set(jogo)
     }
 
     //Insere um jogador na Base de Dados
