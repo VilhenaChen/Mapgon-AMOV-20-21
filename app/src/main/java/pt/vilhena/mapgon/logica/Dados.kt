@@ -79,7 +79,10 @@ class Dados : Serializable {
         )
         val jogo = hashMapOf(
             "nrJogadores" to 1,
-            "Comecou" to false
+            "Comecou" to false,
+            "IDEquipa" to "",
+            "NomeEquipa" to "",
+            "PoligonoFeito" to false
         )
         db.collection("Equipas").document(nomeEquipa).collection( arrayJogadores[0].nome).document("coordenadas").set(coordenadas)
         db.collection("Equipas").document(nomeEquipa).set(jogo)
@@ -190,7 +193,9 @@ class Dados : Serializable {
 
     //Le da base de Dados a lista de poligonos para depois mostarar na scoreboard
     fun getListaPoligonos() {
-
+        val db = Firebase.firestore
+        val c = db.collection("Poligonos")
+        //Acabar
     }
 
     //Le da base de Dados o Top de Equipas de um certo poligono

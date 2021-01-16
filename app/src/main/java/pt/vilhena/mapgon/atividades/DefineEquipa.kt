@@ -9,10 +9,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
+import android.widget.Toast
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_define_equipa.*
 import kotlinx.android.synthetic.main.entrada_jogador.view.*
+import kotlinx.coroutines.*
 import pt.vilhena.mapgon.R
 import pt.vilhena.mapgon.logica.Dados
 import pt.vilhena.mapgon.logica.Jogador
@@ -20,6 +22,9 @@ import pt.vilhena.mapgon.logica.Jogador
 class DefineEquipa : AppCompatActivity()  {
     lateinit var dados : Dados
     var adapter : JogadoresDefineEquipaAdapter? = null
+    private val mainscope = MainScope()
+    var Flag : Boolean = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_define_equipa)
@@ -34,6 +39,27 @@ class DefineEquipa : AppCompatActivity()  {
 
         TeamIDText.text = dados.nomeEquipa
         //Log.d("A PRIMA DO DAVID DE 4",dados.getArrayJogadores()[0].latitude)
+
+        //Esta Coroutine serve para verificar se ja existem, ou nao 3 ou mais jogadores ligados
+        mainscope.launch(Dispatchers.Default){
+            val db = Firebase.firestore
+            var number : Long = 0
+            val c = db.collection("Equipas").document(dados.nomeEquipa)
+            while(true) {
+                db.runTransaction { transation ->
+                    val doc = transation.get(c)
+                    number = doc.getLong("nrJogadores")!!
+                    Log.d("HERE",number.toString())
+                    if (number >= 3) {
+                        Log.d("HERE","sera")
+                        Flag = true
+                    }
+                    Flag = false
+                    null
+                }
+                delay(500)
+            }
+        }
 
     }
 
@@ -68,22 +94,34 @@ class DefineEquipa : AppCompatActivity()  {
         }
     }
 
+    fun changeBtnVisibility() {
+        mainscope.cancel()
+        btnDefine.visibility= View.VISIBLE
+    }
+
     //Ir para o Jogo
     fun onbtnStart(view: View) {
-        if(!nomeEquipa.text.toString().isEmpty()){
-            dados.mudaNomeEquipa(nomeEquipa.text.toString())
+        if (Flag == true) {
+            if (!nomeEquipa.text.toString().isEmpty()) {
+                dados.mudaNomeEquipa(nomeEquipa.text.toString())
+            }
+            val db = Firebase.firestore
+            val v = db.collection("Equipas").document(dados.nomeEquipa)
+            db.runTransaction { transition ->
+                val doc = transition.get(v)
+                transition.update(v, "Comecou", true)
+                null
+            }
+            val intent = Intent(this, Jogo::class.java)
+            intent.putExtra("Dados", dados);
+            startActivity(intent)
+            finish()
         }
-        val db = Firebase.firestore
-        val v = db.collection("Equipas").document(dados.nomeEquipa)
-        db.runTransaction { transition ->
-            val doc = transition.get(v)
-            transition.update(v,"Comecou", true)
-            null
+        else
+        {
+            Toast.makeText(this, "Precisa de ter 3 ou mais jogadores", Toast.LENGTH_SHORT).show()
+            return
         }
-        val intent = Intent(this, Jogo::class.java)
-        intent.putExtra("Dados", dados);
-        startActivity(intent)
-        finish()
     }
 
     //Voltar atras
@@ -94,6 +132,5 @@ class DefineEquipa : AppCompatActivity()  {
         startActivity(intent)
         finish()
     }
-
 
 }
