@@ -33,12 +33,13 @@ class AguardaJogo : AppCompatActivity()  {
                     }
                     null
                 }
-                delay(1000)
+                delay(500)
             }
         }
     }
 
     fun comecaJogo(){
+        mainscope.cancel()
         val intent = Intent(this, Jogo::class.java)
         intent.putExtra("Dados", dados)
         startActivity(intent)
@@ -47,7 +48,6 @@ class AguardaJogo : AppCompatActivity()  {
 
     override fun onDestroy() {
         super.onDestroy()
-        mainscope.cancel()
     }
 
 
