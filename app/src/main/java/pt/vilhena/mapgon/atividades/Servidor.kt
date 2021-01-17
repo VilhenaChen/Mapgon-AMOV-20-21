@@ -2,37 +2,27 @@
 package pt.vilhena.mapgon.atividades
 
 import android.Manifest
-import android.app.AlertDialog
-import android.content.DialogInterface
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.content.res.ColorStateList
-import android.graphics.Color
 import android.location.Location
 import android.net.wifi.WifiManager
 import android.os.Bundle
-import android.text.InputFilter
-import android.text.Spanned
 import android.util.Log
-import android.util.Patterns
-import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.View
-import android.widget.*
+import android.view.ViewGroup
+import android.widget.BaseAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.location.*
-import com.google.firebase.firestore.Source
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_servidor.*
+import kotlinx.android.synthetic.main.entrada_jogador.view.*
 import kotlinx.coroutines.*
 import pt.vilhena.mapgon.MainActivity
-import pt.vilhena.mapgon.ModeloVistaJogo
 import pt.vilhena.mapgon.R
-import pt.vilhena.mapgon.SERVER_PORT
 import pt.vilhena.mapgon.logica.Dados
-import java.util.concurrent.TimeUnit
+import pt.vilhena.mapgon.logica.Jogador
 
 
 const val SERVER_MODE = 0
@@ -44,6 +34,8 @@ class Servidor : AppCompatActivity() {
     var longitude : String = ""
     var coordenadas : String =""
     lateinit var dados : Dados
+    var mainscope = MainScope()
+    //var adapterSevidor : ServidorAdapter? = null
 
     //private lateinit var model : ModeloVistaJogo
     //private var dlg : AlertDialog? = null
@@ -54,6 +46,7 @@ class Servidor : AppCompatActivity() {
         dados = intent.getSerializableExtra("Dados") as Dados
         //model = ViewModelProvider(this).get(ModeloVistaJogo::class.java)
 
+        //adapterSevidor = ServidorAdapter(this, dados.getArrayJogadores())
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         val permission =ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION)
@@ -69,9 +62,14 @@ class Servidor : AppCompatActivity() {
                     dados.mudaNomeEquipa("")
                     dados.adicionaJogador(latitude, longitude)
                     dados.criaBD()
+                    dados.idProprio = 1
                 }
             }
         }
+        //while(dados.idProprio!=1){Log.d("THREAD","AQUI")}
+        //startCorroutine()
+
+
 
 
 
@@ -91,6 +89,45 @@ class Servidor : AppCompatActivity() {
         }*/
     }
 
+    /*fun startCorroutine(){
+        mainscope.launch(Dispatchers.Default){
+            while(true) {
+                dados.getInfoEquipa()
+                grelha_JogadoresServidor.adapter = adapterSevidor
+                delay(2000)
+            }
+        }
+    }*/
+    class ServidorAdapter : BaseAdapter {
+        var arrayJogadores = ArrayList<Jogador>()
+        var context : Context? = null
+
+        constructor(context: Context, arrayJogadores : ArrayList<Jogador>) : super(){
+            this.context = context
+            this.arrayJogadores = arrayJogadores
+        }
+
+        override fun getCount(): Int {
+            return arrayJogadores.size
+        }
+
+        override fun getItem(position: Int): Any {
+            return arrayJogadores[position]
+        }
+
+        override fun getItemId(position: Int): Long {
+            return position.toLong()
+        }
+
+        override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+            val jogador = this.arrayJogadores[position]
+            var inflator = context!!.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            var jogadorView= inflator.inflate(R.layout.entrada_jogador, null)
+            jogadorView.entradaNomeJogador.text = jogador.nome
+
+            return jogadorView
+        }
+    }
     /*
     override fun onPause() {
         super.onPause()
@@ -163,18 +200,20 @@ class Servidor : AppCompatActivity() {
 
     //Escrever na Firesbase as coordenadas
     fun onCloseTeam(view: View) {
-        Log.d("A PRIMA DO DAVID DE 3",dados.getArrayJogadores()[0].latitude)
         val intent = Intent(this, DefineEquipa::class.java)
         intent.putExtra("Dados", dados);
+        mainscope.cancel()
         startActivity(intent)
         finish()
     }
+
 
     //Voltar atras
     override fun onBackPressed() {
         super.onBackPressed()
         val intent = Intent(this, MainActivity::class.java)
         intent.putExtra("Dados", dados)
+        mainscope.cancel()
         startActivity(intent)
         finish()
     }

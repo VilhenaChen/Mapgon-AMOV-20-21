@@ -120,7 +120,6 @@ class Cliente : AppCompatActivity()  {
         if(!IPClient.text.isEmpty()) {
             db.collection("Equipas").document(IPClient.text.toString()).get().addOnSuccessListener { v ->
                 if(v.exists()){ //Caso a equipa exista
-                    Log.d("AQUI","POIS")
                     if(v.getBoolean("Comecou") == false) {
                         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
                         val permission = ContextCompat.checkSelfPermission(
@@ -128,35 +127,22 @@ class Cliente : AppCompatActivity()  {
                             Manifest.permission.ACCESS_FINE_LOCATION
                         )
                         if (permission == PackageManager.PERMISSION_GRANTED) {
-                            Log.d("AQUI 1/5", "POIS")
                             fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
                                 if (location != null) {
-                                    Log.d("AQUI 2", "POIS")
                                     latitude = location!!.latitude.toString()
-                                    Log.d("AQUI 2.1", "POIS")
                                     longitude = location!!.longitude.toString()
-                                    Log.d("AQUI 2.2", "POIS")
                                     dados.setIDEquipa(IPClient.text.toString())
-                                    Log.d("AQUI 2.3", "POIS")
                                     dados.mudaNomeEquipa("")
-                                    Log.d("AQUI 2.4", "POIS")
                                     dados.getInfoEquipa()
-                                    Log.d("AQUI 3", "POIS")
-                                    Log.d(
-                                        "OI",
-                                        dados.getArrayJogadores().last().latitude.toDouble()
-                                            .toString()
-                                    )
                                     var dist = dados.getFuncoesCoordenadas().haversine(
-                                        dados.getArrayJogadores().last().latitude.toDouble(),
-                                        dados.getArrayJogadores().last().longitude.toDouble(),
+                                        latitude.toDouble(),
+                                        longitude.toDouble(),
                                         dados.getArrayJogadores()[0].latitude.toDouble(),
                                         dados.getArrayJogadores()[0].longitude.toDouble()
                                     )
-                                    Log.d("PUTA QUE ME PARIU", dist.toString())
-                                    Log.d("AQUI 4", "POIS")
+
                                     if (dist <= 0.1) {
-                                        Log.d("AQUI 5", "POIS")
+                                        dados.idProprio = dados.getArrayJogadores().last().id + 1
                                         dados.adicionaJogador(latitude, longitude)
                                         dados.insereJogadorDB()
                                         val intent = Intent(this, AguardaJogo::class.java)
@@ -168,13 +154,15 @@ class Cliente : AppCompatActivity()  {
                                         return@addOnSuccessListener
                                     }
                                 } else {
-                                    Log.d("FIM", "POIS")
                                 }
                             }
                         }
                     }
-                    Toast.makeText(this, "O Jogo dessa equipa ja comecou", Toast.LENGTH_SHORT).show()
-                    return@addOnSuccessListener
+                    else {
+                        Toast.makeText(this, "O Jogo dessa equipa ja comecou", Toast.LENGTH_SHORT)
+                            .show()
+                        return@addOnSuccessListener
+                    }
                 }
                 else { //Caso a equipa nao exista na Base de Dados
                     Toast.makeText(this, "O Servidor nao existe", Toast.LENGTH_SHORT).show()

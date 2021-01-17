@@ -38,7 +38,6 @@ class DefineEquipa : AppCompatActivity()  {
         grelha_JogadoresDefineEquipa.adapter = adapter
 
         TeamIDText.text = dados.nomeEquipa
-        //Log.d("A PRIMA DO DAVID DE 4",dados.getArrayJogadores()[0].latitude)
 
         //Esta Coroutine serve para verificar se ja existem, ou nao 3 ou mais jogadores ligados
         mainscope.launch(Dispatchers.Default){
@@ -49,12 +48,7 @@ class DefineEquipa : AppCompatActivity()  {
                 db.runTransaction { transation ->
                     val doc = transation.get(c)
                     number = doc.getLong("nrJogadores")!!
-                    Log.d("HERE",number.toString())
-                    if (number >= 3) {
-                        Log.d("HERE","sera")
-                        Flag = true
-                    }
-                    Flag = false
+                    Flag = number in 3..10
                     null
                 }
                 delay(500)
@@ -101,12 +95,18 @@ class DefineEquipa : AppCompatActivity()  {
 
     //Ir para o Jogo
     fun onbtnStart(view: View) {
-        if (Flag == true) {
+        val db = Firebase.firestore
+        val v = db.collection("Equipas").document(dados.nomeEquipa)
+        if (Flag) {
+            dados.geraIDEquipa()
             if (!nomeEquipa.text.toString().isEmpty()) {
-                dados.mudaNomeEquipa(nomeEquipa.text.toString())
+                db.runTransaction { transition ->
+                    transition.update(v, "NomeEquipa", nomeEquipa.text.toString())
+                    null
+                }
             }
-            val db = Firebase.firestore
-            val v = db.collection("Equipas").document(dados.nomeEquipa)
+            dados.determinaPoligono()
+
             db.runTransaction { transition ->
                 val doc = transition.get(v)
                 transition.update(v, "Comecou", true)
@@ -119,7 +119,7 @@ class DefineEquipa : AppCompatActivity()  {
         }
         else
         {
-            Toast.makeText(this, "Precisa de ter 3 ou mais jogadores", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Precisa de ter entre 3 a 10 jogadores", Toast.LENGTH_SHORT).show()
             return
         }
     }
