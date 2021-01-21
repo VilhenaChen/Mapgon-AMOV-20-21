@@ -55,7 +55,6 @@ class Jogo : AppCompatActivity()  {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_jogo)
-        Log.d("COMECA","AQUI")
         dados = intent.getSerializableExtra("Dados") as Dados
         if(intent.hasExtra("TempoRestante")){
             inicio_Coutdown = intent.getLongExtra("TempoRestante", 3600000)
@@ -71,28 +70,11 @@ class Jogo : AppCompatActivity()  {
         request.fastestInterval = 15000
         request.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         jogPolig.text = "J${dados.idProprio} - ${dados.poli}"
-        /*
+
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-
-        val permission = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-        if(permission == PackageManager.PERMISSION_GRANTED)
-        {
-            fusedLocationClient.requestLocationUpdates(request, object : LocationCallback(){
-                override fun onLocationResult(locationResult: LocationResult) {
-                    val location : Location? = locationResult.lastLocation
-                    if(location!=null)
-                    {
-                        latitude = location!!.latitude.toString()
-                        longitude = location!!.longitude.toString()
-                    }
-
-
-                }
-            },null)
-        }*/fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         val permission = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
         if (permission == PackageManager.PERMISSION_GRANTED) {
-            /*mainscope.launch(Dispatchers.Default) {*/
+
                     callback = object : LocationCallback(){
                     override fun onLocationResult(locationResult: LocationResult) {
                         val location : Location? = locationResult.lastLocation
@@ -115,39 +97,8 @@ class Jogo : AppCompatActivity()  {
                         }
                     }
                 }
-                /*while(true) {*/
-                    fusedLocationClient.requestLocationUpdates(request,
-                        callback as LocationCallback,null)
-                    /*fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
-                        if (location != null) {
-                            Log.d("AQUI 2", "POIS")
-                            latitude = location!!.latitude.toString()
-                            Log.d("AQUI 2.1", latitude)
-                            longitude = location!!.longitude.toString()
-                            Log.d("AQUI 2.4", longitude)
-                            dados.getInfoEquipa()
-                            Log.d("AQUI 3", "POIS")
-                            dados.atualizaDB(
-                                dados.getArrayJogadores()[dados.idProprio-1].nome,
-                                latitude,
-                                longitude
-                            )
-                            dados.getInfoEquipa()
-                            var poligonoFeito = dados.verificaPoligono()
-                            if (poligonoFeito) {
-                                changeBtnVisibility(true)
-                            }
-                            else{
-                                changeBtnVisibility(false)
-                            }
-                            grelhaCoordenadasJogo.adapter = adapterCoordenadas
-                            grelhaDistanciaJogo.adapter = adapterDistancias
-                            grelhaAnguloJogo.adapter = adapterAngulos
-                        }
-                    }
-                    delay(30000)*/
-                //}
-            //}
+                fusedLocationClient.requestLocationUpdates(request,
+                    callback as LocationCallback,null)
         }
     }
 
@@ -207,8 +158,6 @@ class Jogo : AppCompatActivity()  {
 
         override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
             var jogador1 = this.arrayJogadores[position]
-            Log.d("POSICAO1",  position.toString())
-            Log.d("NOMEJOG1", jogador1.nome)
             var pos: Int = position
             if(position!=(arrayJogadores.size-1)){
                 pos = pos + 1
@@ -217,22 +166,16 @@ class Jogo : AppCompatActivity()  {
                 pos = 0
             }
             var jogador2 = this.arrayJogadores[pos]
-            Log.d("POSICAO2",  pos.toString())
-            Log.d("NOMEJOG2", jogador2.nome)
-            Log.d("LATITUDE 1", jogador1.latitude)
-            Log.d("LONGITUDE 1", jogador1.longitude)
-            Log.d("LATITUDE 2", jogador2.latitude)
-            Log.d("LONGITUDE 2", jogador2.longitude)
             var dist = dados.getFuncoesCoordenadas().haversine(jogador1.latitude.toDouble(),jogador1.longitude.toDouble(),jogador2.latitude.toDouble(),jogador2.longitude.toDouble())
-            Log.d("Distancia KM", dist.toString())
+
             dist *= 1000
-            Log.d("Distancia M", dist.toString())
+
             var distFloat= dist.toFloat()
-            Log.d("DISTANCIA",distFloat.toString())
+
             var inflator = context!!.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
             var jogadorView= inflator.inflate(R.layout.entrada_distancia, null)
             jogadorView.entradaDistanciasJogador.text = "J${jogador1.id} - J${jogador2.id} - ${distFloat}m"
-            Log.d("POSICAOFinal",  position.toString())
+
 
             return jogadorView
         }

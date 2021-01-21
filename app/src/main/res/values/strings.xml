@@ -31,5 +31,5 @@
     <string name="msg_ip_address">Server IP Address: %s \nWaiting for a Client...</string>
     <string name="error_address">Address not Recognized</string>
     <string name="btn_emulator">Emulador</string>
-    <string name="button_cancel">Cancelar</string>
+    <string name="button_cancel">Cancel</string>
 </resources>

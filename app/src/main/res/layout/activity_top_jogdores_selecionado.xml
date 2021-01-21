@@ -20,6 +20,7 @@
                 android:layout_weight="4"
                 android:gravity="center">
                 <TextView
+                    android:id="@+id/poligonoEquipaSelecionada"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text=""
@@ -72,6 +73,7 @@
                     android:layout_width="0dp"
                     android:layout_weight="1">
                     <TextView
+                        android:id="@+id/nomeEquipaTOP"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
@@ -102,12 +104,12 @@
                     android:layout_width="0dp"
                     android:layout_weight="1">
                     <TextView
-                        android:id="@+id/idEquipa"
+                        android:id="@+id/idEquipaTop"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:text=""
-                        android:textSize="20sp"/>
+                        android:textSize="16sp"/>
                 </LinearLayout>
             </LinearLayout>
             <LinearLayout
@@ -133,7 +135,7 @@
                     android:layout_width="0dp"
                     android:layout_weight="1">
                     <TextView
-                        android:id="@+id/data"
+                        android:id="@+id/dataTop"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
@@ -164,7 +166,7 @@
                     android:layout_width="0dp"
                     android:layout_weight="1">
                     <TextView
-                        android:id="@+id/hora"
+                        android:id="@+id/horaTop"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
@@ -239,7 +241,7 @@
                 android:layout_height="0dp"
                 android:layout_weight="1">
                 <TextView
-                    android:id="@+id/arePoli"
+                    android:id="@+id/areaPoli"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"

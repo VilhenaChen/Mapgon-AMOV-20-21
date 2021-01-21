@@ -29,4 +29,8 @@
     <string name="Hora">Hora</string>
     <string name="DistanciaMediajog">Distancia media entre jogadores</string>
     <string name="AreaPol">Area do poligono</string>
+    <string name="error_address">Endereco nao reconhecido</string>
+    <string name="btn_emulator">Emulador</string>
+    <string name="button_cancel">Cancelar</string>
+    <string name="msg_ip_address">IP do servidor nao reconhecido: %s[...]</string>
 </resources>

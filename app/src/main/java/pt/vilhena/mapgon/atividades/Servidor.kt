@@ -128,62 +128,7 @@ class Servidor : AppCompatActivity() {
             return jogadorView
         }
     }
-    /*
-    override fun onPause() {
-        super.onPause()
-        dlg?.apply {
-            if (isShowing)
-                dismiss()
-        }
-    }
-    */
-    /*
-    private fun startAsServer() {
-        val wifiManager = applicationContext.getSystemService(WIFI_SERVICE) as WifiManager
-        val ip = wifiManager.connectionInfo.ipAddress
-        val strIPAddress = String.format("%d.%d.%d.%d",
-                ip and 0xff,
-                (ip shr 8) and 0xff,
-                (ip shr 16) and 0xff,
-                (ip shr 24) and 0xff
-        )
 
-        val ll = LinearLayout(this).apply {
-            val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-            this.setPadding(50, 50, 50, 50)
-            layoutParams = params
-            setBackgroundColor(Color.rgb(240, 224, 208))
-            orientation = LinearLayout.HORIZONTAL
-            addView(ProgressBar(context).apply {
-                isIndeterminate = true
-                val paramsPB = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-                paramsPB.gravity = Gravity.CENTER_VERTICAL
-                layoutParams = paramsPB
-                indeterminateTintList = ColorStateList.valueOf(Color.rgb(96, 96, 32))
-            })
-            addView(TextView(context).apply {
-                val paramsTV = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-                layoutParams = paramsTV
-                text = String.format(getString(R.string.msg_ip_address),strIPAddress)
-                textSize = 20f
-                setTextColor(Color.rgb(96, 96, 32))
-                textAlignment = View.TEXT_ALIGNMENT_CENTER
-            })
-        }
-
-        dlg = AlertDialog.Builder(this).run {
-            setTitle(getString(R.string.Modo_Servidor))
-            setView(ll)
-            setOnCancelListener {
-                model.stopServer()
-                finish()
-            }
-            create()
-        }
-        model.startServer()
-
-        dlg?.show()
-    } */
 
     //Mostra o IP do Servidor
     fun getIPServidor() {

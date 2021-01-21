@@ -31,6 +31,11 @@ class Dados : Serializable {
         return arrayJogadores
     }
 
+    //get Array Poligonos
+    fun getPoligonos() : ArrayList<String>{
+        return arrayPoligonos
+    }
+
     //Adiciona Jogador ao Array de Jogadores
     fun adicionaJogador(latitude: String, longitude: String)
     {
@@ -175,6 +180,11 @@ class Dados : Serializable {
         arrayJogadores.clear()
         db.runTransaction { transition ->
             val doc = transition.get(c)
+            poli = doc.getString("Poligono")!!
+            null
+        }
+        db.runTransaction { transition ->
+            val doc = transition.get(c)
             cont = doc.getLong("nrJogadores")!!.toInt()
             null
         }
@@ -221,14 +231,12 @@ class Dados : Serializable {
     fun verificaPoligono() : Boolean{
         var lado : Double = 0.0
         for(i in arrayJogadores.indices) {
-            Log.d("VALOR DO I", i.toString())
             if(i == 0) {
                 lado = funcoesCoordenadas.haversine(arrayJogadores[i].latitude.toDouble(), arrayJogadores[i].longitude.toDouble(), arrayJogadores[i + 1].latitude.toDouble(), arrayJogadores[i + 1].longitude.toDouble())
             } else{
-                Log.d("HERE TAMANHO", arrayJogadores.size.toString())
                 if (i == arrayJogadores.size - 1) {
                     if(lado !=  funcoesCoordenadas.haversine(arrayJogadores[i].latitude.toDouble(), arrayJogadores[i].longitude.toDouble(), arrayJogadores[0].latitude.toDouble(), arrayJogadores[0].longitude.toDouble())) {
-                        Log.d("HERE", i.toString())
+
                         return false
                     }
                 }else {
@@ -258,12 +266,7 @@ class Dados : Serializable {
         val db = Firebase.firestore
         val v = db.collection("Equipas").document(nomeEquipa).collection(jogador).document("coordenadas")
 
-        //.get vai buscar a informacao a Base de Dados, so depois e que se altera
-        /*v.get(Source.SERVER)
-            .addOnSuccessListener {
-                v.update("Latitude",latitude,"longitude",longitude)
-            }
-        */
+
         //Esta versao ajuda caso haja muitas threads a fazer varias coisas ao msm tempo na bd
         db.runTransaction { transition ->
             //val doc = transition.get(v)
@@ -273,6 +276,23 @@ class Dados : Serializable {
             transition.update(v, "Longitude", longitudeatual)
             null
         }
+    }
+
+    //calculaDistanciaMedia
+    fun calculaDistanciaMedia() : Double{
+        var dist : Double = 0.0
+        dist = dist + funcoesCoordenadas.haversine(arrayJogadores[0].latitude.toDouble(), arrayJogadores[0].longitude.toDouble(), arrayJogadores[1].latitude.toDouble(), arrayJogadores[1].longitude.toDouble())
+        dist *= 1000
+        return dist
+    }
+
+    fun areaPoligono() : Double{
+        var dist : Double = 0.0
+        dist = dist + funcoesCoordenadas.haversine(arrayJogadores[0].latitude.toDouble(), arrayJogadores[0].longitude.toDouble(), arrayJogadores[1].latitude.toDouble(), arrayJogadores[1].longitude.toDouble())
+        dist *= 1000
+        var nLados : Double = arrayJogadores.size.toDouble()
+        var area : Double = (dist * dist * nLados) / (4*Math.tan(180/nLados) * 3.14159 / 180)
+        return area
     }
 
     //Le da base de Dados a lista de poligonos para depois mostarar na scoreboard
